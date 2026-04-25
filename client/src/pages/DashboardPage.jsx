@@ -4,7 +4,6 @@ import { useToast } from '../components/ui/ToastContext';
 import { StatsCards } from '../components/dashboard/StatsCards';
 import { FilterBar } from '../components/dashboard/FilterBar';
 import { ReportTable } from '../components/dashboard/ReportTable';
-import { generateDashboardPDF } from '../services/pdfGenerator';
 import '../styles/dashboard.css';
 
 export const DashboardPage = () => {
@@ -39,21 +38,53 @@ export const DashboardPage = () => {
   };
 
   const handleViewDetails = (reportId) => {
+    // Dans la phase 6, nous ajouterons une modale ou une navigation vers le détail
     addToast(`Affichage du rapport ${reportId} (Bientôt disponible)`, "info");
   };
 
   const handleExportPDF = async (reportId) => {
-    // Cette fonction sera également migrée si nécessaire, pour l'instant elle prévient l'utilisateur
-    addToast("L'export individuel est en cours de migration. Utilisez la synthèse globale en haut !", "info");
+    try {
+      addToast("Génération du PDF...", "info");
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/export/pdf/${reportId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error("Erreur PDF");
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Rapport_RSTracking_${reportId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      addToast("Échec de l'export PDF", "error");
+    }
   };
 
   const handleExportGlobalPDF = async () => {
     try {
       addToast("Génération de la synthèse PDF...", "info");
-      await generateDashboardPDF(filters);
-      addToast("PDF généré avec succès !", "success");
+      const qs = new URLSearchParams(filters).toString();
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/export/dashboard/pdf?${qs}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error("Erreur PDF");
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Synthese_Rapports_RSTracking.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
     } catch (err) {
-      console.error(err);
       addToast("Échec de l'export PDF", "error");
     }
   };

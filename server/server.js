@@ -22,6 +22,7 @@ app.use(cors({
   origin: process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',')
     : [
+        'https://dist-six-pi-94.vercel.app',
         'https://rstracking-app.vercel.app',
         'https://rs-tracking.vercel.app',
         'https://rfdailyreports.com',

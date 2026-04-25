@@ -1,0 +1,426 @@
+/* ----- Status Badges ----- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.badge-progress {
+  background-color: var(--status-progress-bg);
+  color: var(--status-progress-text);
+  border-color: var(--status-progress-border);
+}
+
+.badge-complete {
+  background-color: var(--status-complete-bg);
+  color: var(--status-complete-text);
+  border-color: var(--status-complete-border);
+}
+
+.badge-blocked {
+  background-color: var(--status-blocked-bg);
+  color: var(--status-blocked-text);
+  border-color: var(--status-blocked-border);
+}
+
+/* ----- Report Header ----- */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  border-left: 4px solid var(--primary-500);
+}
+
+.report-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.report-meta h2 {
+  font-size: 1.5rem;
+  color: var(--gray-900);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.draft-badge, .locked-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.draft-badge {
+  background-color: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.locked-badge {
+  background-color: var(--status-complete-text);
+  color: white;
+}
+
+.report-global-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.report-global-status label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--gray-600);
+}
+
+.status-select {
+  padding: 0.4rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-300);
+  background-color: var(--gray-50);
+  font-size: 0.9rem;
+  font-weight: 500;
+  outline: none;
+}
+
+/* ----- Tasks List ----- */
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.tasks-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--gray-800);
+}
+
+.total-time {
+  font-size: 1rem;
+  color: var(--gray-600);
+  background-color: var(--primary-50);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--primary-300);
+}
+
+.total-time strong {
+  color: var(--primary-700);
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.task-row {
+  display: flex;
+  gap: var(--space-md);
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  transition: all var(--transition-fast);
+}
+
+.task-row:hover {
+  border-color: var(--primary-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.task-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.task-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.task-meta {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.task-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.task-group.flex-grow {
+  flex-grow: 1;
+}
+
+.task-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.task-group input, .task-group textarea, .task-group select {
+  padding: 0.6rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  background-color: white;
+  transition: border-color var(--transition-fast);
+}
+
+.task-group input:focus, .task-group textarea:focus, .task-group select:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px var(--primary-100);
+}
+
+.task-group textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.task-remove-btn {
+  color: var(--gray-400);
+  font-size: 1.25rem;
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  align-self: flex-start;
+  transition: all var(--transition-fast);
+}
+
+.task-remove-btn:hover {
+  color: var(--status-blocked-text);
+  background-color: var(--status-blocked-bg);
+}
+
+/* ----- Remarks & Attachments ----- */
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+@media (max-width: 768px) {
+  .grid-2-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+.remarks-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  min-height: 120px;
+  background-color: var(--gray-50);
+}
+
+.remarks-input:focus {
+  background-color: white;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px var(--primary-100);
+  outline: none;
+}
+
+/* Upload Zone */
+.upload-zone {
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  background-color: var(--gray-50);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  margin-bottom: var(--space-md);
+}
+
+.upload-zone:hover {
+  border-color: var(--primary-400);
+  background-color: var(--primary-50);
+}
+
+.upload-zone.dragging {
+  border-color: var(--primary-600);
+  background-color: var(--primary-100);
+  transform: scale(1.02);
+}
+
+.upload-zone.uploading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.upload-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.upload-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-sm);
+}
+
+.upload-text {
+  color: var(--gray-700);
+  margin: 0;
+}
+
+.upload-hint {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.attachment-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.attachment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.8rem;
+  background-color: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+}
+
+.attachment-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  overflow: hidden;
+}
+
+.file-icon {
+  font-size: 1.25rem;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.file-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--primary-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-size {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+.btn-icon-danger {
+  color: var(--gray-400);
+  padding: 0.3rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-icon-danger:hover {
+  color: var(--status-blocked-text);
+  background-color: var(--status-blocked-bg);
+}
+
+/* ----- Actions ----- */
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+  background-color: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
+
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  background-color: white;
+  color: var(--gray-700);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--gray-50);
+  border-color: var(--gray-400);
+}
+
+.btn-success {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--status-complete-text);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 6px rgba(4, 120, 87, 0.2);
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #059669; /* slightly darker */
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px rgba(4, 120, 87, 0.3);
+}
+
+.btn-secondary:disabled, .btn-success:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ----- Locked State ----- */
+.report-container.locked input,
+.report-container.locked textarea,
+.report-container.locked select {
+  background-color: var(--gray-100);
+  color: var(--gray-600);
+  border-color: transparent;
+  pointer-events: none;
+}
+
+.report-container.locked .task-row {
+  background-color: white;
+  border-color: var(--gray-200);
+}

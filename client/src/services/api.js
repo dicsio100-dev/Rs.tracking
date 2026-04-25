@@ -1,5 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api';
-
+const API_URL = import.meta.env.DEV ? '/api' : 'https://rs-tracking.onrender.com/api';
 /**
  * Helper performant des requêtes fetch avec gestion du token et des erreurs
  */

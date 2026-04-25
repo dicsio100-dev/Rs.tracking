@@ -19,9 +19,16 @@ const PORT = process.env.PORT || 3001;
 
 // ── Middleware ──
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? ['https://rfdailyreports.com', 'https://www.rfdailyreports.com']
-    : ['http://localhost:5173', 'http://localhost:3000'],
+  origin: process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',')
+    : [
+        'https://rs-tracking.vercel.app',
+        'https://rfdailyreports.com',
+        'https://www.rfdailyreports.com',
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://localhost:3000'
+      ],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));

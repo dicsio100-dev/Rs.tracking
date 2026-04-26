@@ -1,15 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/ui/ToastContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
 import { ReportPage } from './pages/ReportPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { AssistantsPage } from './pages/AssistantsPage';
 
 // Composant Layout global avec Header
 const Layout = ({ children }) => {
   const { user, isAdmin, logout } = useAuth();
-  
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'fr' ? 'en' : 'fr');
+  };
+
   return (
     <div className="app-layout">
       <header className="app-header">
@@ -32,18 +39,22 @@ const Layout = ({ children }) => {
           
           {isAdmin && (
             <nav style={{ display: 'flex', gap: '1rem', marginLeft: '1rem' }}>
-              <Link to="/dashboard" className="nav-link">Dashboard</Link>
+              <Link to="/dashboard" className="nav-link">{t('app.dashboard')}</Link>
+              <Link to="/assistants" className="nav-link">{t('app.assistants')}</Link>
             </nav>
           )}
         </div>
         
-        <div className="header-right">
+        <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button onClick={toggleLanguage} style={{ background: 'none', border: '1px solid white', color: 'white', padding: '0.3rem 0.6rem', borderRadius: '4px', cursor: 'pointer' }}>
+            {i18n.language === 'fr' ? 'EN' : 'FR'}
+          </button>
           <div className="user-badge">
             <span className="user-name">{user?.full_name}</span>
             <span className="user-role">{user?.role}</span>
           </div>
           <button onClick={logout} className="btn-logout">
-            Déconnexion
+            {t('app.logout')}
           </button>
         </div>
       </header>
@@ -68,6 +79,7 @@ function App() {
 
             <Route element={<ProtectedRoute requireAdmin={true} />}>
               <Route path="/dashboard" element={<Layout><DashboardPage /></Layout>} />
+              <Route path="/assistants" element={<Layout><AssistantsPage /></Layout>} />
             </Route>
 
             <Route path="*" element={<Navigate to="/login" replace />} />

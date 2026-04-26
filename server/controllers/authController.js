@@ -37,4 +37,53 @@ async function changePassword(req, res) {
   res.json({ message: 'Mot de passe mis à jour avec succès.' });
 }
 
-module.exports = { login, getMe, changePassword };
+const nodemailer = require('nodemailer');
+
+async function forgotPassword(req, res) {
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ error: 'Username is required.' });
+
+  const { data: user } = await supabase.from('users').select('*').eq('username', username).eq('is_active', true).single();
+  
+  if (!user || user.role !== 'admin') {
+    return res.json({ message: 'If this user exists and is an admin, an email will be sent.' });
+  }
+
+  // Generate a random temporary password
+  const tempPassword = Math.random().toString(36).slice(-8);
+  const hash = bcrypt.hashSync(tempPassword, 12);
+  
+  await supabase.from('users').update({ password_hash: hash }).eq('id', user.id);
+
+  // Send email using Nodemailer Ethereal for testing/development
+  nodemailer.createTestAccount((err, account) => {
+    if (err) {
+      console.error('Failed to create a testing account. ' + err.message);
+      return;
+    }
+    
+    let transporter = nodemailer.createTransport({
+        host: account.smtp.host,
+        port: account.smtp.port,
+        secure: account.smtp.secure,
+        auth: { user: account.user, pass: account.pass }
+    });
+
+    let message = {
+        from: 'Support RS.Tracking <support@rstracking.com>',
+        to: 'dicsio100@gmail.com',
+        subject: 'Réinitialisation de mot de passe',
+        text: `Bonjour,\n\nVos identifiants administrateur ont été réinitialisés.\nIdentifiant : ${user.username}\nNouveau mot de passe : ${tempPassword}\n\nMerci de changer votre mot de passe après connexion.`
+    };
+
+    transporter.sendMail(message, (err, info) => {
+        if (err) return console.log('Error occurred. ' + err.message);
+        console.log('Password Reset Email sent: %s', info.messageId);
+        console.log('🔗 EMAIL PREVIEW URL: %s', nodemailer.getTestMessageUrl(info));
+    });
+  });
+
+  res.json({ message: 'If this user exists and is an admin, an email will be sent.' });
+}
+
+module.exports = { login, getMe, changePassword, forgotPassword };

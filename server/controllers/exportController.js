@@ -3,7 +3,8 @@ const { generateReportPDF, generateDashboardPDF } = require('../services/pdfServ
 
 async function exportSinglePdf(req, res) {
   try {
-    const pdfBuffer = await generateReportPDF(req.params.id);
+    const lang = req.query.lang || 'en';
+    const pdfBuffer = await generateReportPDF(req.params.id, lang);
     
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=Rapport_RS_Tracking_${req.params.id}.pdf`);
@@ -16,7 +17,7 @@ async function exportSinglePdf(req, res) {
 
 async function exportDashboardPdf(req, res) {
   try {
-    const { date, user_id, status, from, to } = req.query;
+    const { date, user_id, status, from, to, lang } = req.query;
     let query = supabase.from('reports').select('*, users!inner(full_name)');
     
     if (user_id) query = query.eq('user_id', user_id);
@@ -40,7 +41,8 @@ async function exportDashboardPdf(req, res) {
     }
     
     const formattedReports = (reports || []).map(r => ({ ...r, user_name: r.users?.full_name }));
-    const pdfBuffer = await generateDashboardPDF(formattedReports, tasksMap);
+    const targetLang = lang || 'en';
+    const pdfBuffer = await generateDashboardPDF(formattedReports, tasksMap, targetLang);
     
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=Synthese_Rapports_RSTracking.pdf`);

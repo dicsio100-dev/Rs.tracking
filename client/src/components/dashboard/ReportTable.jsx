@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StatusBadge } from '../reports/StatusBadge';
 
 export const ReportTable = ({ reports, isLoading, onViewDetails }) => {
+  const { t } = useTranslation();
   if (isLoading) {
     return <div className="card text-center p-8"><span className="loader"></span></div>;
   }
@@ -10,8 +12,7 @@ export const ReportTable = ({ reports, isLoading, onViewDetails }) => {
     return (
       <div className="card text-center p-8 empty-state">
         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
-        <h3>Aucun rapport trouvé</h3>
-        <p>Il n'y a pas de rapports correspondant à ces critères.</p>
+        <h3>{t('dashboard.empty')}</h3>
       </div>
     );
   }
@@ -27,13 +28,13 @@ export const ReportTable = ({ reports, isLoading, onViewDetails }) => {
       <table className="report-table">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Assistant</th>
-            <th>Statut</th>
-            <th>Tâches</th>
-            <th>Temps total</th>
-            <th>État</th>
-            <th>Actions</th>
+            <th>{t('dashboard.table.date')}</th>
+            <th>{t('dashboard.table.assistant')}</th>
+            <th>{t('dashboard.table.status')}</th>
+            <th>{t('dashboard.table.tasks')}</th>
+            <th>{t('dashboard.table.time')}</th>
+            <th>{t('dashboard.table.state')}</th>
+            <th>{t('dashboard.table.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -61,7 +62,7 @@ export const ReportTable = ({ reports, isLoading, onViewDetails }) => {
                   className="btn-text-primary"
                   onClick={() => onViewDetails(report.id)}
                 >
-                  Voir détail
+                  {t('dashboard.table.view')}
                 </button>
               </td>
             </tr>

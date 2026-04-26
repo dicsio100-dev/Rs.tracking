@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 import { useToast } from '../ui/ToastContext';
 import { TaskRow } from './TaskRow';
@@ -6,6 +7,7 @@ import { AttachmentUpload } from './AttachmentUpload';
 import { StatusBadge } from './StatusBadge';
 
 export const ReportForm = ({ initialDate }) => {
+  const { t } = useTranslation();
   const [report, setReport] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [remarks, setRemarks] = useState('');
@@ -155,25 +157,25 @@ export const ReportForm = ({ initialDate }) => {
     <div className={`report-container ${isLocked ? 'locked' : ''}`}>
       <div className="report-header card mb-4">
         <div className="report-meta">
-          <h2>Rapport du {new Date(initialDate).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</h2>
+          <h2>{t('report.report_of')} {new Date(initialDate).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</h2>
           {isLocked ? (
-            <div className="locked-badge">✓ SOUMIS</div>
+            <div className="locked-badge">✓ {t('report.status_completed')}</div>
           ) : (
             <div className="draft-badge">✏️ BROUILLON</div>
           )}
         </div>
         
         <div className="report-global-status">
-          <label>Statut global de la journée</label>
+          <label>{t('report.status')}</label>
           <select 
             value={status} 
             onChange={(e) => setStatus(e.target.value)}
             disabled={isLocked}
             className="status-select"
           >
-            <option value="en_cours">En cours</option>
-            <option value="termine">Terminé</option>
-            <option value="bloque">Bloqué</option>
+            <option value="en_cours">{t('report.status_progress')}</option>
+            <option value="termine">{t('report.status_completed')}</option>
+            <option value="bloque">{t('report.status_blocked')}</option>
           </select>
           <StatusBadge status={status} />
         </div>
@@ -181,9 +183,9 @@ export const ReportForm = ({ initialDate }) => {
 
       <div className="card mb-4">
         <div className="tasks-header">
-          <h3>Tâches Réalisées</h3>
+          <h3>{t('report.tasks')}</h3>
           <div className="total-time">
-            Total : <strong>{totalTime} h</strong>
+            {t('report.total')} : <strong>{totalTime} h</strong>
           </div>
         </div>
 
@@ -202,14 +204,14 @@ export const ReportForm = ({ initialDate }) => {
 
         {!isLocked && (
           <button type="button" className="btn-secondary mt-4" onClick={addTask}>
-            + Ajouter une tâche
+            {t('report.add_task')}
           </button>
         )}
       </div>
 
       <div className="grid-2-cols mb-4">
         <div className="card">
-          <h3>Remarques / Difficultés</h3>
+          <h3>{t('report.remarks')}</h3>
           <textarea
             className="remarks-input"
             value={remarks}
@@ -238,7 +240,7 @@ export const ReportForm = ({ initialDate }) => {
             onClick={() => saveReport(false)}
             disabled={isSaving}
           >
-            💾 Sauvegarder (Brouillon)
+            💾 {t('report.save_draft')}
           </button>
           <button 
             type="button" 
@@ -246,7 +248,7 @@ export const ReportForm = ({ initialDate }) => {
             onClick={() => saveReport(true)}
             disabled={isSaving}
           >
-            🚀 SOUMETTRE LE RAPPORT
+            🚀 {t('report.submit')}
           </button>
         </div>
       )}

@@ -7,6 +7,7 @@ import { LoginPage } from './pages/LoginPage';
 import { ReportPage } from './pages/ReportPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { AssistantsPage } from './pages/AssistantsPage';
+import { LanguagePopup } from './components/ui/LanguagePopup';
 
 // Composant Layout global avec Header
 const Layout = ({ children }) => {
@@ -14,7 +15,9 @@ const Layout = ({ children }) => {
   const { t, i18n } = useTranslation();
 
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'fr' ? 'en' : 'fr');
+    const newLang = i18n.language === 'fr' ? 'en' : 'fr';
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('language_chosen', 'true');
   };
 
   return (
@@ -46,7 +49,7 @@ const Layout = ({ children }) => {
         </div>
         
         <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button onClick={toggleLanguage} style={{ background: 'none', border: '1px solid white', color: 'white', padding: '0.3rem 0.6rem', borderRadius: '4px', cursor: 'pointer' }}>
+          <button onClick={toggleLanguage} style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.3)', color: 'white', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
             {i18n.language === 'fr' ? 'EN' : 'FR'}
           </button>
           <div className="user-badge">
@@ -69,6 +72,7 @@ function App() {
   return (
     <AuthProvider>
       <ToastProvider>
+        <LanguagePopup />
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />

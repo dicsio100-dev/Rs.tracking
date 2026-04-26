@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../services/api';
 import { useToast } from '../components/ui/ToastContext';
 import { StatsCards } from '../components/dashboard/StatsCards';
@@ -7,6 +8,7 @@ import { ReportTable } from '../components/dashboard/ReportTable';
 import '../styles/dashboard.css';
 
 export const DashboardPage = () => {
+  const { t, i18n } = useTranslation();
   const [stats, setStats] = useState(null);
   const [reports, setReports] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,23 +33,22 @@ export const DashboardPage = () => {
       setStats(statsRes.stats);
       setReports(reportsRes.reports);
     } catch (error) {
-      addToast("Erreur lors du chargement du tableau de bord", "error");
+      addToast(t('errors.fetch_dashboard') || "Error loading dashboard", "error");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleViewDetails = (reportId) => {
-    // Dans la phase 6, nous ajouterons une modale ou une navigation vers le détail
     addToast(`Affichage du rapport ${reportId} (Bientôt disponible)`, "info");
   };
 
   const handleExportPDF = async (reportId) => {
     try {
-      addToast("Génération du PDF...", "info");
+      addToast(t('messages.generating_pdf') || "Generating PDF...", "info");
       const token = localStorage.getItem('token');
       const API_URL = import.meta.env.DEV ? '/api' : 'https://rs-tracking.onrender.com/api';
-      const response = await fetch(`${API_URL}/export/pdf/${reportId}`, {
+      const response = await fetch(`${API_URL}/export/pdf/${reportId}?lang=${i18n.language}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) throw new Error("Erreur PDF");
@@ -62,14 +63,14 @@ export const DashboardPage = () => {
       document.body.removeChild(a);
       setTimeout(() => window.URL.revokeObjectURL(url), 1000);
     } catch (err) {
-      addToast("Échec de l'export PDF", "error");
+      addToast(t('errors.pdf_failed') || "PDF export failed", "error");
     }
   };
 
   const handleExportGlobalPDF = async () => {
     try {
-      addToast("Génération de la synthèse PDF...", "info");
-      const qs = new URLSearchParams(filters).toString();
+      addToast(t('messages.generating_pdf') || "Generating PDF...", "info");
+      const qs = new URLSearchParams({...filters, lang: i18n.language}).toString();
       const token = localStorage.getItem('token');
       const API_URL = import.meta.env.DEV ? '/api' : 'https://rs-tracking.onrender.com/api';
       const response = await fetch(`${API_URL}/export/dashboard/pdf?${qs}`, {
@@ -87,7 +88,7 @@ export const DashboardPage = () => {
       document.body.removeChild(a);
       setTimeout(() => window.URL.revokeObjectURL(url), 1000);
     } catch (err) {
-      addToast("Échec de l'export PDF", "error");
+      addToast(t('errors.pdf_failed') || "PDF export failed", "error");
     }
   };
 
@@ -95,12 +96,12 @@ export const DashboardPage = () => {
     <div className="dashboard-container animate-fade-in">
       <div className="dashboard-header">
         <div>
-          <h2>Tableau de bord Administrateur</h2>
-          <p>Vue d'ensemble de l'activité des assistants</p>
+          <h2>{t('dashboard.title')}</h2>
+          <p>{t('dashboard.subtitle')}</p>
         </div>
         <div className="dashboard-actions">
           <button className="btn-export pdf" onClick={handleExportGlobalPDF} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, boxShadow: '0 4px 6px rgba(239, 68, 68, 0.2)' }}>
-            📄 Exporter la synthèse PDF
+            📄 {t('dashboard.export_pdf')}
           </button>
         </div>
       </div>

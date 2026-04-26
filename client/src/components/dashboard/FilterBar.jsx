@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../services/api';
 
 export const FilterBar = ({ filters, onFilterChange }) => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const FilterBar = ({ filters, onFilterChange }) => {
   return (
     <div className="filter-bar card">
       <div className="filter-group">
-        <label>Date</label>
+        <label>{t('dashboard.filters.date')}</label>
         <input 
           type="date" 
           name="date" 
@@ -42,13 +44,13 @@ export const FilterBar = ({ filters, onFilterChange }) => {
       </div>
 
       <div className="filter-group">
-        <label>Assistant</label>
+        <label>{t('dashboard.filters.assistant')}</label>
         <select 
           name="user_id" 
           value={filters.user_id || ''} 
           onChange={handleChange}
         >
-          <option value="">Tous les assistants</option>
+          <option value="">{t('dashboard.filters.all_assistants')}</option>
           {users.map(user => (
             <option key={user.id} value={user.id}>{user.full_name}</option>
           ))}
@@ -56,22 +58,22 @@ export const FilterBar = ({ filters, onFilterChange }) => {
       </div>
 
       <div className="filter-group">
-        <label>Statut Global</label>
+        <label>{t('dashboard.filters.status')}</label>
         <select 
           name="status" 
           value={filters.status || ''} 
           onChange={handleChange}
         >
-          <option value="">Tous les statuts</option>
-          <option value="en_cours">En cours</option>
-          <option value="termine">Terminé</option>
-          <option value="bloque">Bloqué</option>
+          <option value="">{t('dashboard.filters.all_statuses')}</option>
+          <option value="en_cours">{t('report.status_progress')}</option>
+          <option value="termine">{t('report.status_completed')}</option>
+          <option value="bloque">{t('report.status_blocked')}</option>
         </select>
       </div>
 
       <div className="filter-actions">
         <button className="btn-secondary" onClick={clearFilters}>
-          Réinitialiser
+          {t('dashboard.filters.reset')}
         </button>
       </div>
     </div>

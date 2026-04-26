@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { ReportForm } from '../components/reports/ReportForm';
 import '../styles/report.css';
 
 export const ReportPage = () => {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   // Par défaut, le rapport d'aujourd'hui
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
@@ -27,7 +29,7 @@ export const ReportPage = () => {
             borderRadius: 'var(--radius-md)',
             fontWeight: '800'
           }}>RS</div>
-          <h1 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 600 }}>Rapport d'Activité</h1>
+          <h1 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 600 }}>{t('app.title')}</h1>
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
@@ -48,7 +50,7 @@ export const ReportPage = () => {
             onMouseOver={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
             onMouseOut={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
           >
-            Déconnexion
+            {t('app.logout')}
           </button>
         </div>
       </header>

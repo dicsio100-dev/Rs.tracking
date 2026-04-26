@@ -46,7 +46,8 @@ export const DashboardPage = () => {
     try {
       addToast("Génération du PDF...", "info");
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/export/pdf/${reportId}`, {
+      const API_URL = import.meta.env.DEV ? '/api' : 'https://rs-tracking.onrender.com/api';
+      const response = await fetch(`${API_URL}/export/pdf/${reportId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) throw new Error("Erreur PDF");
@@ -70,7 +71,8 @@ export const DashboardPage = () => {
       addToast("Génération de la synthèse PDF...", "info");
       const qs = new URLSearchParams(filters).toString();
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/export/dashboard/pdf?${qs}`, {
+      const API_URL = import.meta.env.DEV ? '/api' : 'https://rs-tracking.onrender.com/api';
+      const response = await fetch(`${API_URL}/export/dashboard/pdf?${qs}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) throw new Error("Erreur PDF");
